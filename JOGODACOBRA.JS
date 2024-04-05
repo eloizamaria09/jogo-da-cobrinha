@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const speedDisplay = document.getElementById("speed");
     const scoreDisplay = document.getElementById('score');
     const startButton = document.getElementById('startButton');
+    const speedUpButton = document.getElementById('speedUp');
+    const slowDownButton = document.getElementById('slowDown');
 
     const canvasWidth = canvas.width = 400;
     const canvasHeight = canvas.height = 400;
@@ -14,9 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let dx = 0;
     let dy = 0;
     let gameRunning = false;
+    let speed = 200; // Intervalo de atualização inicial (em milissegundos)
+    let gameInterval;
 
     function draw() {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.fillStyle = '#f0f0f0'; // Cor de fundo da grade
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        // Desenhar grade
+        ctx.strokeStyle = '#ccc'; // Cor da grade
+        for (let i = 0; i <= canvasWidth; i += blockSize) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvasHeight);
+            ctx.stroke();
+        }
+        for (let i = 0; i <= canvasHeight; i += blockSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvasWidth, i);
+            ctx.stroke();
+        }
+
         ctx.fillStyle = 'green';
         ctx.fillRect(food.x * blockSize, food.y * blockSize, blockSize, blockSize);
 
@@ -26,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         scoreDisplay.textContent = 'Pontuação: ' + score;
+        speedDisplay.textContent = 'Velocidade: ' + (1000 / speed);
     }
 
     function update() {
@@ -34,6 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (head.x === food.x && head.y === food.y) {
             score++;
+            if (score % 10 === 0) {
+                speed -= 5;
+                clearInterval(gameInterval);
+                gameInterval = setInterval(() => {
+                    update();
+                    draw();
+                }, speed);
+            }
             food = {
                 x: Math.floor(Math.random() * (canvasWidth / blockSize)),
                 y: Math.floor(Math.random() * (canvasHeight / blockSize))
@@ -63,16 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
         startButton.disabled = false;
     }
 
-    let gameInterval;
-    startButton.addEventListener('click', () => {
+    function startGame() {
         if (!gameRunning) {
             gameInterval = setInterval(() => {
                 update();
                 draw();
-            }, 100);
+            }, speed);
             startButton.disabled = true;
             gameRunning = true;
         }
+    }
+
+    startButton.addEventListener('click', startGame);
+
+    slowDownButton.addEventListener('click', () => {
+        speed += 5; // Diminui a velocidade
+        clearInterval(gameInterval);
+        gameInterval = setInterval(() => {
+            update();
+            draw();
+        }, speed);
+    });
+
+    speedUpButton.addEventListener('click', () => {
+        speed -= 5; // Aumenta a velocidade
+        clearInterval(gameInterval);
+        gameInterval = setInterval(() => {
+            update();
+            draw();
+        }, speed);
     });
 
     document.addEventListener('keydown', (e) => {
@@ -104,3 +155,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+

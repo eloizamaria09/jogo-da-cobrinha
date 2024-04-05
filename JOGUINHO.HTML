@@ -7,11 +7,19 @@
     <link rel="stylesheet" type="text/css" href="JOGO.CSS">
 </head>
 <body>
-    <div class="game-container">
-        <canvas id="gameCanvas"></canvas>
-        <div id="score">Pontuação: 0</div>
+    <h1 id="score">Pontuação: 0</h1>
+    <h2 id="speed">Velocidade: 5</h2>
+    <div class="mainContainer">
+        <div class="game-container">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+    </div>
+    <div class="buttonContainer">
+        <button id="slowDown">diminuir velocidade</button>
         <button id="startButton">Iniciar Jogo</button>
+        <button id="speedUp">Aumentar velocidade</button>
     </div>
     <script src="JOGODACOBRA.JS"></script>
 </body>
 </html>
+

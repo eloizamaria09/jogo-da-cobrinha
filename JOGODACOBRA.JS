@@ -40,10 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.stroke();
         }
 
-        ctx.fillStyle = 'green';
+        ctx.fillStyle = 'pink';
         ctx.fillRect(food.x * blockSize, food.y * blockSize, blockSize, blockSize);
 
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = 'pink';
         snake.forEach((segment) => {
             ctx.fillRect(segment.x * blockSize, segment.y * blockSize, blockSize, blockSize);
         });
